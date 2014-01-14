@@ -4,6 +4,15 @@
 <dict>
 	<key>items</key>
 	<array>
+    <dict>
+      <key>cell</key>             <string>PSSwitchCell</string>
+      <key>default</key>          <true/>
+      <key>defaults</key>         <string>com.lkemitchll.statustime+prefs</string>
+      <key>key</key>              <string>STIsEnabled</string>
+      <key>label</key>            <string>Enabled</string>
+      <key>alternateColors</key>  <true/>
+      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/settingschanged</string>
+    </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
@@ -12,12 +21,17 @@
 		</dict>
 		<dict>
       <key>cell</key>             <string>PSEditTextCell</string>
-      <key>defaults</key>         <string>com.lkemitchll.statustime+</string>
+      <key>defaults</key>         <string>com.lkemitchll.statustime+prefs</string>
       <key>default</key>          <string>hh:mm</string>
-      <key>key</key>              <string>STtime</string>
+      <key>key</key>              <string>STTime</string>
       <key>label</key>            <string>Text</string>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+/settingschanged</string>
+      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/settingschanged</string>
 		</dict>
+    <dict>
+      <key>cell</key>             <string>PSButtonCell</string>
+      <key>label</key>            <string>Save and Respring</string>
+      <key>action</key>           <string>save</string>
+    </dict>
 	</array>
 	<key>title</key>
 	<string>StatusTime+</string>
