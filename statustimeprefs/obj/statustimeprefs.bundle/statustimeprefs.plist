@@ -13,6 +13,7 @@
 		<dict>
       <key>cell</key>             <string>PSEditTextCell</string>
       <key>defaults</key>         <string>com.lkemitchll.statustime+</string>
+      <key>default</key>          <string>hh:mm</string>
       <key>key</key>              <string>STtime</string>
       <key>label</key>            <string>Text</string>
       <key>PostNotification</key> <string>com.lkemitchll.statustime+/settingschanged</string>
