@@ -1,0 +1,9 @@
+Package: com.lkemitchll.statustime+
+Name: StatusTime+
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Luke Mitchell
+Author: Luke Mitchell
+Section: Tweaks
