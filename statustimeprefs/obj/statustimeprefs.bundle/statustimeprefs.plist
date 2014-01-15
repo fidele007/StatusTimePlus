@@ -68,37 +68,6 @@
       <key>label</key>            <string>Save</string>
       <key>action</key>           <string>save</string>
     </dict>
-    <!-- group / formatting -->
-    <dict>
-      <key>cell</key>             <string>PSGroupCell</string>
-      <key>footerText</key>
-      <string>
-        Formatting Guide
-
-        Time:
-        hh = hour
-        mm = minutes
-        ss = seconds
-
-        Day:
-        dd = 14
-        E = Tue
-        EEEE = Tuesday
-        EEEEE = T
-
-        Month:
-        MM = 12
-        MMM = Sept
-        MMMM = September
-        MMMMM = S
-        
-        Year:
-        yy = 14
-        yyyy = 2014
-        Custom Text:
-        'custom' = custom
-      </string>
-    </dict>
 	</array>
   <!-- main title -->
 	<key>title</key>
