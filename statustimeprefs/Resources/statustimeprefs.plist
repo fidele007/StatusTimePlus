@@ -34,16 +34,6 @@
     <dict>
       <key>cell</key>             <string>PSGroupCell</string>
       <key>label</key>            <string>Device will respring</string>
-    </dict>
-    <!-- save button -->
-    <dict>
-      <key>cell</key>             <string>PSButtonCell</string>
-      <key>label</key>            <string>Save</string>
-      <key>action</key>           <string>save</string>
-    </dict>
-    <!-- group / formatting -->
-    <dict>
-      <key>cell</key>             <string>PSGroupCell</string>
       <key>footerText</key>
       <string>
         Formatting Guide
@@ -71,6 +61,12 @@
         Custom Text:
         'custom' = custom
       </string>
+    </dict>
+    <!-- save button -->
+    <dict>
+      <key>cell</key>             <string>PSButtonCell</string>
+      <key>label</key>            <string>Save</string>
+      <key>action</key>           <string>save</string>
     </dict>
 	</array>
   <!-- main title -->
