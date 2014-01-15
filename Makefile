@@ -5,6 +5,8 @@ StatusTime_FILES = Tweak.xm
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 
+StatusTime_FRAMEWORKS = UIKit
+
 after-install::
 	install.exec "killall -9 SpringBoard"
 SUBPROJECTS += statustimeprefs

@@ -1,11 +1,11 @@
 #import <Preferences/Preferences.h>
-#import <Foundation/NSTask.h>
+#import <notify.h>
 
-@interface statustimeprefsListController: PSListController {
-}
+@interface statustimeprefsListController: PSListController
 @end
 
 @implementation statustimeprefsListController
+
 - (id)specifiers {
 	if(_specifiers == nil) {
 		_specifiers = [[self loadSpecifiersFromPlistName:@"statustimeprefs" target:self] retain];
@@ -13,19 +13,13 @@
 	return _specifiers;
 }
 
--(void)save
-{
-    [self.view endEditing:YES];
+- (void)save {
 
-    NSTask *restartSpringboard = [NSTask new];
-    NSMutableArray *restartSpringboardArgs = [[NSMutableArray alloc] initWithCapacity:5];
+  // Dismiss keyboard
+  [self.view endEditing:YES];
+  // Send notification to respring function
+  notify_post("com.lkemitchll.statustime+prefs/STRespring");
 
-    [restartSpringboardArgs addObject: [NSString @"-9"]];
-    [restartSpringboardArgs addObject: [NSString @"SpringBoard"]];
-
-    restartSpringboard = [NSTask launchedTaskWithLaunchPath: @"/usr/bin/killall" arguments: restartSpringboardArgs];
-    [restartSpringboard launch];
 }
-@end
 
-// vim:ft=objc
+@end

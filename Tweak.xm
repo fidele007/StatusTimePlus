@@ -1,3 +1,5 @@
+#import <SpringBoard/SpringBoard.h>
+
 static BOOL STIsEnabled = YES; // Default value
 static NSString* STTime = nil;
 
@@ -29,7 +31,7 @@ static NSString* STTime = nil;
   {
     [newDateFormat setDateFormat:STTime];
   } else {
-    [newDateFormat setDateFormat:@"'nope'"];
+    [newDateFormat setDateFormat:@"hh:mm"]; // Default value
   }
 
 }
@@ -37,20 +39,44 @@ static NSString* STTime = nil;
 // Always make sure you clean up after yourself; Not doing so could have grave consequences!
 %end
 
-static void loadPrefs()
+// Function to load saved preferences
+static void STLoadPrefs()
 {
-    NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
-    if(prefs)
-    {
-        STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
-        STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
-        [STTime retain];
-    }
-    [prefs release];
+  NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
+  if(prefs)
+  {
+      STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
+      STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
+      [STTime retain];
+  }
+  [prefs release];
+}
+
+// Function to respring device
+void STPerformRespring() {
+  [(SpringBoard *)[UIApplication sharedApplication] _relaunchSpringBoardNow];
 }
 
 %ctor 
 {
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)loadPrefs, CFSTR("com.lkemitchll.statustime+prefs/settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-    loadPrefs();
+  @autoreleasepool {
+
+    // Listen for new settings changes
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+      NULL, 
+      (CFNotificationCallback)STLoadPrefs, 
+      CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"), 
+      NULL, 
+      CFNotificationSuspensionBehaviorCoalesce);
+
+    // Listen for respring message
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+      NULL, 
+      (CFNotificationCallback)STPerformRespring, 
+      CFSTR("com.lkemitchll.statustime+prefs/STRespring"), 
+      NULL, 
+      0);
+
+    STLoadPrefs();
+  }
 }

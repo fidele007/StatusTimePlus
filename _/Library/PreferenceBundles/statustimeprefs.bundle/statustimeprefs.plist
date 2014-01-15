@@ -11,26 +11,59 @@
       <key>key</key>              <string>STIsEnabled</string>
       <key>label</key>            <string>Enabled</string>
       <key>alternateColors</key>  <true/>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/settingschanged</string>
+      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/SettingsChanged</string>
     </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>StatusTime+</string>
+			<string>custom clock format</string>
 		</dict>
 		<dict>
       <key>cell</key>             <string>PSEditTextCell</string>
       <key>defaults</key>         <string>com.lkemitchll.statustime+prefs</string>
       <key>default</key>          <string>hh:mm</string>
       <key>key</key>              <string>STTime</string>
-      <key>label</key>            <string>Text</string>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/settingschanged</string>
+      <key>label</key>            <string>Format</string>
+      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 		</dict>
     <dict>
+      <key>cell</key>             <string>PSGroupCell</string>
+      <key>label</key>            <string>Device will respring</string>
+    </dict>
+    <dict>
       <key>cell</key>             <string>PSButtonCell</string>
-      <key>label</key>            <string>Save and Respring</string>
+      <key>label</key>            <string>Save</string>
       <key>action</key>           <string>save</string>
+    </dict>
+    <dict>
+      <key>cell</key>             <string>PSGroupCell</string>
+      <key>footerText</key>
+      <string>
+        Formatting Guide
+        Time:
+        hh = hour
+        mm = minutes
+        ss = seconds
+
+        Day:
+        dd = 14
+        E = Tue
+        EEEE = Tuesday
+        EEEEE = T
+
+        Month:
+        MM = 12
+        MMM = Sept
+        MMMM = September
+        MMMMM = S
+        
+        Year:
+        yy = 14
+        yyyy = 2014
+        Custom Text:
+        'custom' = custom
+      </string>
     </dict>
 	</array>
 	<key>title</key>
