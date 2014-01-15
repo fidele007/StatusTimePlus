@@ -58,9 +58,9 @@
         Year:
         yy = 14
         yyyy = 2014
-        
+
         Custom Text:
-        'custom' = custom
+        'doge' = doge
       </string>
     </dict>
     <!-- save button -->
