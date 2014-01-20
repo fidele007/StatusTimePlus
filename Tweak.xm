@@ -1,5 +1,15 @@
 #import <SpringBoard/SpringBoard.h>
 
+/* 
+Credits:
+- https://github.com/kirbylover4000/ThatSameHack
+- https://github.com/r-plus/CloakStatus
+- https://github.com/YuzuruS/clockStatus/blob/master/Tweak.xm
+- https://github.com/daniel-nagy/CustomCarrier
+- /u/miktr
+- /u/thekirbylover
+*/
+
 @class SBStatusBarStateAggregator;
 @interface SBStatusBarStateAggregator : NSObject{
 }        
