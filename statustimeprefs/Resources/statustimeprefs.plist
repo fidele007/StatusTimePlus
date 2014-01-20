@@ -12,7 +12,7 @@
       <key>key</key>              <string>STIsEnabled</string>
       <key>label</key>            <string>Enabled</string>
       <key>alternateColors</key>  <true/>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/SettingsChanged</string>
+      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
     </dict>
     <!-- Group -->
 		<dict>
@@ -33,7 +33,6 @@
     <!-- Group -->
     <dict>
       <key>cell</key>             <string>PSGroupCell</string>
-      <key>label</key>            <string>Device will respring</string>
       <key>footerText</key>
       <string>
         Formatting Guide
@@ -67,7 +66,7 @@
     <dict>
       <key>cell</key>             <string>PSButtonCell</string>
       <key>label</key>            <string>Save</string>
-      <key>action</key>           <string>save</string>
+      <key>action</key>           <string>STSave</string>
     </dict>
 	</array>
   <!-- main title -->

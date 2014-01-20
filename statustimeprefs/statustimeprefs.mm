@@ -13,12 +13,12 @@
 	return _specifiers;
 }
 
-- (void)save {
+- (void)STSave {
 
   // Dismiss keyboard
   [self.view endEditing:YES];
   // Send notification to respring function
-  notify_post("com.lkemitchll.statustime+prefs/STRespring");
+  notify_post("com.lkemitchll.statustime+prefs/STUpdate");
 
 }
 
