@@ -4,37 +4,75 @@
 <dict>
 	<key>items</key>
 	<array>
-    <!-- enable switch -->
-    <dict>
-      <key>cell</key>             <string>PSSwitchCell</string>
-      <key>default</key>          <true/>
-      <key>defaults</key>         <string>com.lkemitchll.statustime+prefs</string>
-      <key>key</key>              <string>STIsEnabled</string>
-      <key>label</key>            <string>Enabled</string>
-      <key>alternateColors</key>  <true/>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
-    </dict>
-    <!-- Group -->
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.lkemitchll.statustime+prefs</string>
+			<key>key</key>
+			<string>STIsEnabled</string>
+			<key>label</key>
+			<string>Enabled</string>
+			<key>alternateColors</key>
+			<true/>
+			<key>PostNotification</key>
+			<string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>custom clock format</string>
 		</dict>
-    <!-- text cell -->
 		<dict>
-      <key>cell</key>             <string>PSEditTextCell</string>
-      <key>defaults</key>         <string>com.lkemitchll.statustime+prefs</string>
-      <key>default</key>          <string>hh:mm</string>
-      <key>key</key>              <string>STTime</string>
-      <key>label</key>            <string>Format</string>
-      <key>PostNotification</key> <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>defaults</key>
+			<string>com.lkemitchll.statustime+prefs</string>
+			<key>default</key>
+			<string>hh:mm</string>
+			<key>key</key>
+			<string>STTime</string>
+			<key>label</key>
+			<string>Format</string>
+			<key>PostNotification</key>
+			<string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 		</dict>
-    <!-- Group -->
-    <dict>
-      <key>cell</key>             <string>PSGroupCell</string>
-      <key>footerText</key>
-      <string>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Refresh Interval</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>defaults</key>
+			<string>com.lkemitchll.statustime+prefs</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>key</key>
+			<string>refesh_pref</string>
+			<key>label</key>
+			<string>Refresh Every</string>
+			<key>validTitles</key>
+			<array>
+				<string>Second</string>
+				<string>Minute</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>1</integer>
+				<real>60</real>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>
         Formatting Guide
         
         Time:
@@ -59,17 +97,18 @@
         yyyy = 2014
 
         Custom Text:
-        'doge' = Any custom text
+        &apos;doge&apos; = Any custom text
       </string>
-    </dict>
-    <!-- save button -->
-    <dict>
-      <key>cell</key>             <string>PSButtonCell</string>
-      <key>label</key>            <string>Save</string>
-      <key>action</key>           <string>STSave</string>
-    </dict>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Save</string>
+			<key>action</key>
+			<string>STSave</string>
+		</dict>
 	</array>
-  <!-- main title -->
 	<key>title</key>
 	<string>StatusTime+</string>
 </dict>
