@@ -45,26 +45,32 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Refresh Interval</string>
+      <key>footerText</key>
+      <string>NOTE: refreshing every second may cause increased battery drain</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkListCell</string>
 			<key>defaults</key>
 			<string>com.lkemitchll.statustime+prefs</string>
+      <key>default</key>
+      <real>60</real>
 			<key>detail</key>
 			<string>PSListItemsController</string>
 			<key>key</key>
-			<string>refesh_pref</string>
+			<string>STRefresh</string>
 			<key>label</key>
 			<string>Refresh Every</string>
+      <key>PostNotification</key>
+      <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 			<key>validTitles</key>
 			<array>
 				<string>Second</string>
-				<string>Minute</string>
+				<string>Minute (default)</string>
 			</array>
 			<key>validValues</key>
 			<array>
-				<integer>1</integer>
+				<real>1</real>
 				<real>60</real>
 			</array>
 		</dict>

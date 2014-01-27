@@ -6,6 +6,7 @@ Credits:
 - https://github.com/r-plus/CloakStatus
 - https://github.com/YuzuruS/clockStatus/blob/master/Tweak.xm
 - https://github.com/daniel-nagy/CustomCarrier
+- http://stackoverflow.com/questions/15318528/how-to-use-the-value-in-pslinklistcell-in-preference-bundle
 - /u/miktr
 - /u/thekirbylover
 */
@@ -21,21 +22,35 @@ Credits:
 @end 
 
 // Setup required variables
-static BOOL STIsEnabled = YES; // Default value
-static NSString* STTime = nil;
+static NSString *STTime       = nil;
+static BOOL STIsEnabled       = YES;    // Default value
+static NSInteger STInterval   = 60;     // Default value
 
 %hook SBStatusBarStateAggregator
 
+/*
+ * SET THE REFRESH RATE
+*/
 -(void)_restartTimeItemTimer {
   %orig;
-  // Hook _timeItemTimer iVar
-  NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
-  // Initialise a date in the future to fire the timer (default = 60 secs)
-  NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: 60.0];
-  // Set fire date
-  [newTimer setFireDate:newFireDate];
+  // set refresh rate if ST is enabled
+  if(STInterval && STIsEnabled)
+  {
+    // Hook _timeItemTimer iVar
+    NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
+    // Initialise a date in the future to fire the timer (default = 60 secs)
+    NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: (double)STInterval];
+    // Set fire date
+    [newTimer setFireDate:newFireDate];
+  } else {
+    %orig;
+    NSLog(@"StatusTime+: INFO: Disabled or no prefs, deafult refresh rate set");
+  }
 }
 
+/*
+ * FORMAT THE TIME STRING
+*/
 -(void)_resetTimeItemFormatter {
   %orig;
   // Hook _timeItemDateFormatter iVar
@@ -46,14 +61,16 @@ static NSString* STTime = nil;
     [newDateFormat setDateFormat:STTime];
     NSLog(@"StatusTime+: Date format set");
   } else {
-    [newDateFormat setDateFormat:@"hh:mm"]; // Default value
-    NSLog(@"StatusTime+: INFO: Disabled or no prefs, default value set");
+    %orig;
+    NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
   }
 }
-// Always make sure you clean up after yourself; Not doing so could have grave consequences!
+// END HOOKING
 %end
 
-// Function to update the clock after save
+/*
+ * UPDATE THE CLOCK AFTER SAVE
+*/
 static void STUpdateClock()
 {
   // Create an object of SBStatusBarStateAggregator
@@ -65,17 +82,20 @@ static void STUpdateClock()
   NSLog(@"StatusTime+: Clock updated");
 }
 
-// Function to load saved preferences
+/*
+ * LOAD PREFERENCES
+*/
 static void STLoadPrefs()
 {
   NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
   if(prefs)
   {
     // Set variables based on prefs
-    STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
+    STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled ); 
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
+    STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
-    // Initiate clock updat for good measure
+    // Initiate clock update for good measure
     STUpdateClock();
   }
   [prefs release];
