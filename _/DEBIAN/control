@@ -2,9 +2,9 @@ Package: com.lkemitchll.statustime+
 Name: StatusTime+
 Depends: mobilesubstrate
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: Customise the Status Bar with custom strings.
 Maintainer: Luke Mitchell
 Author: Luke Mitchell
 Section: Tweaks
-Version: 0.0.1-121
-Installed-Size: 92
+Version: 0.0.1-126
+Installed-Size: 124
