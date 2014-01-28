@@ -20,4 +20,8 @@
   notify_post("com.lkemitchll.statustime+prefs/STUpdate");
 }
 
+- (void)STDonate {
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XFRCAVRLSTY4L"]];
+}
+
 @end

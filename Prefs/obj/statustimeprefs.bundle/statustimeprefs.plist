@@ -85,6 +85,7 @@
         hh = hour
         mm = minutes
         ss = seconds
+        a  = am/pm
 
         Day:
         dd = 14
@@ -114,6 +115,20 @@
 			<key>action</key>
 			<string>STSave</string>
 		</dict>
+    <dict>
+      <key>cell</key>
+      <string>PSGroupCell</string>
+    </dict>
+    <dict>
+      <key>cell</key>
+      <string>PSButtonCell</string>
+      <key>label</key>
+      <string>Donate</string>
+      <key>action</key>
+      <string>STDonate</string>
+      <key>icon</key>
+      <string>paypal.png</string>
+    </dict>
 	</array>
 	<key>title</key>
 	<string>StatusTime+</string>
