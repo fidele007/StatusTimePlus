@@ -77,8 +77,20 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Save</string>
+			<key>action</key>
+			<string>STSave</string>
+		</dict>
+    <dict>
+      <key>cell</key>
+      <string>PSGroupCell</string>
+      <key>footerText</key>
+      <string>
         Formatting Guide
         
         Time:
@@ -106,18 +118,6 @@
         Custom Text:
         &apos;doge&apos; = Any custom text
       </string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>label</key>
-			<string>Save</string>
-			<key>action</key>
-			<string>STSave</string>
-		</dict>
-    <dict>
-      <key>cell</key>
-      <string>PSGroupCell</string>
     </dict>
     <dict>
       <key>cell</key>
