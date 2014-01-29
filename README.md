@@ -19,6 +19,8 @@ Built with theos.
 2. Build the project.
 2. run ```make install```.
 
+[LATEST BINARY](http://cl.ly/431V2x2x0o23/download/com.lkemitchll.statustime%2B_0.0.1-5_iphoneos-arm.deb)
+
 I hope you enjoy this simple tweak, it is my very first.
 
 **Issues and forks welcome!**
