@@ -24,13 +24,12 @@ Credits:
 // Setup required variables
 static NSString *STTime       = nil;
 static BOOL STIsEnabled       = YES;    // Default value
+static BOOL STShowOnLock      = false;   // Default value
 static NSInteger STInterval   = 60;     // Default value
 
 %hook SBStatusBarStateAggregator
 
-/*
- * SET THE REFRESH RATE
-*/
+/* SET THE REFRESH RATE */
 -(void)_restartTimeItemTimer {
   %orig;
   // set refresh rate if ST is enabled
@@ -48,9 +47,7 @@ static NSInteger STInterval   = 60;     // Default value
   }
 }
 
-/*
- * FORMAT THE TIME STRING
-*/
+/* FORMAT THE TIME STRING */
 -(void)_resetTimeItemFormatter {
   %orig;
   // Hook _timeItemDateFormatter iVar
@@ -59,7 +56,6 @@ static NSInteger STInterval   = 60;     // Default value
   if(STTime && STIsEnabled)
   {
     [newDateFormat setDateFormat:STTime];
-    NSLog(@"StatusTime+: Date format set");
   } else {
     [newDateFormat setDateFormat: @"hh:mm a"];
     NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
@@ -68,9 +64,17 @@ static NSInteger STInterval   = 60;     // Default value
 // END HOOKING
 %end
 
-/*
- * UPDATE THE CLOCK AFTER SAVE
-*/
+%hook SBLockScreenViewController
+
+/* SHOW CLOCK ON LOCKSCREEN */
+-(bool)shouldShowLockStatusBarTime { 
+  %orig;
+  return STShowOnLock;
+}
+// END HOOKING
+%end
+
+/* UPDATE THE CLOCK AFTER SAVE */
 static void STUpdateClock()
 {
   // Create an object of SBStatusBarStateAggregator
@@ -78,13 +82,10 @@ static void STUpdateClock()
   // Send messages to new object
   [stateAggregator _updateTimeItems];
   [stateAggregator _resetTimeItemFormatter];
-  [stateAggregator updateStatusBarItem:0];
-  NSLog(@"StatusTime+: Clock updated");
+  [stateAggregator updateStatusBarItem: 0];
 }
 
-/*
- * LOAD PREFERENCES
-*/
+/* LOAD PREFERENCES */
 static void STLoadPrefs()
 {
   NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
@@ -92,11 +93,11 @@ static void STLoadPrefs()
   {
     // Set variables based on prefs
     STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled ); 
+    STShowOnLock = ( [prefs objectForKey:@"STShowOnLock"] ? [[prefs objectForKey:@"STShowOnLock"] boolValue] : STShowOnLock );
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
     // Initiate clock update for good measure
-    STUpdateClock();
   }
   [prefs release];
 }
