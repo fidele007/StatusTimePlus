@@ -61,7 +61,7 @@ static NSInteger STInterval   = 60;     // Default value
     [newDateFormat setDateFormat:STTime];
     NSLog(@"StatusTime+: Date format set");
   } else {
-    %orig;
+    [newDateFormat setDateFormat: @"hh:mm a"];
     NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
   }
 }
