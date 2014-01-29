@@ -69,7 +69,12 @@ static NSInteger STInterval   = 60;     // Default value
 /* SHOW CLOCK ON LOCKSCREEN */
 -(bool)shouldShowLockStatusBarTime { 
   %orig;
-  return STShowOnLock;
+  // show on lockscreen if ST is enabled
+  if(STShowOnLock && STIsEnabled){
+    return STShowOnLock;
+  } else {
+    return false;
+  }
 }
 // END HOOKING
 %end
