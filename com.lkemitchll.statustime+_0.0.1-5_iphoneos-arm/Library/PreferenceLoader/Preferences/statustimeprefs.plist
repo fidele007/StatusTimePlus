@@ -1,0 +1,10 @@
+{
+  entry = {
+  	bundle = statustimeprefs;
+  	cell = PSLinkCell;
+  	detail = statustimeprefsListController;
+  	icon = statustimeprefs.png;
+  	isController = 1;
+  	label = 'StatusTime+';
+  };
+}
