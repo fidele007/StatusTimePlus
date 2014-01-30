@@ -7,6 +7,7 @@ Credits:
 - https://github.com/YuzuruS/clockStatus/blob/master/Tweak.xm
 - https://github.com/daniel-nagy/CustomCarrier
 - http://stackoverflow.com/questions/15318528/how-to-use-the-value-in-pslinklistcell-in-preference-bundle
+- http://stackoverflow.com/a/15493211/2819263
 - /u/miktr
 - /u/thekirbylover
 */
