@@ -27,7 +27,6 @@ static NSString *STTime       = nil;
 static BOOL STIsEnabled       = YES;    // Default value
 static BOOL STShowOnLock      = false;   // Default value
 static NSInteger STInterval   = 60;     // Default value
-// static BOOL is24h;
 
 %hook SBStatusBarStateAggregator
 
