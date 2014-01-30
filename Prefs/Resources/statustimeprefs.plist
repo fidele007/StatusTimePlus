@@ -105,35 +105,20 @@
     <dict>
       <key>cell</key>
       <string>PSGroupCell</string>
-      <key>footerText</key>
-      <string>
-        Formatting Guide
-        
-        Time:
-        hh = hour
-        mm = minutes
-        ss = seconds
-        a  = am/pm
-
-        Day:
-        dd = 14
-        E = Tue
-        EEEE = Tuesday
-        EEEEE = T
-
-        Month:
-        MM = 12
-        MMM = Sept
-        MMMM = September
-        MMMMM = S
-        
-        Year:
-        yy = 14
-        yyyy = 2014
-
-        Custom Text:
-        &apos;doge&apos; = Any custom text
-      </string>
+    </dict>
+    <dict>
+      <key>cell</key>
+      <string>PSButtonCell</string>
+      <key>label</key>
+      <string>Formatting Guide</string>
+      <key>action</key>
+      <string>STFormatGuide</string>
+      <key>icon</key>
+      <string>format.png</string>
+    </dict>
+    <dict>
+      <key>cell</key>
+      <string>PSGroupCell</string>
     </dict>
     <dict>
       <key>cell</key>
@@ -144,6 +129,16 @@
       <string>STDonate</string>
       <key>icon</key>
       <string>paypal.png</string>
+    </dict>
+    <dict>
+      <key>cell</key>
+      <string>PSButtonCell</string>
+      <key>label</key>
+      <string>Source</string>
+      <key>action</key>
+      <string>STSource</string>
+      <key>icon</key>
+      <string>source.png</string>
     </dict>
 	</array>
 	<key>title</key>

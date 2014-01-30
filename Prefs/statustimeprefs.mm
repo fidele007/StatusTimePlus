@@ -20,8 +20,16 @@
   notify_post("com.lkemitchll.statustime+prefs/STUpdate");
 }
 
+- (void)STFormatGuide {
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://statustime.eu01.aws.af.cm/"]];
+}
+
 - (void)STDonate {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XFRCAVRLSTY4L"]];
+}
+
+- (void)STSource {
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/LkeMitchll/StatusTimePlus"]];
 }
 
 @end

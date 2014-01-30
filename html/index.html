@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StatusTime+ Formatting Guide</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0" />
+  <style>
+    h4{
+      color: #b94a48;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>StatusTime+</h1>
+        <h3>Formatting Guide</h3>
+        <hr>
+        <h4>Time:</h4>
+        <table class="table">
+          <thead>
+            <tr><th>String</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>hh</td><td>Hour in 12hr format (e.g. 12)</td></tr>
+            <tr><td>HH</td><td>Hour in 24hr format (e.g. 13)</td></tr>
+            <tr><td><b>NOTE: You must turn on turn on 24hr time in Settings > General > Date & Time</b></td><td></td></tr>
+            <tr><td>mm</td><td>Minutes (e.g. 56)</td></tr>
+            <tr><td>ss</td><td>Seconds (e.g. 45)</td></tr>
+            <tr><td>a</td><td>am / pm</td></tr>
+            <tr><td><b>Example: hh:mm:ss a</b></td><td>12:45:33 pm</td></tr>
+          </tbody>
+        </table>
+        <h4>Day:</h4>
+        <table class="table">
+          <thead>
+            <tr><th>String</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>dd</td><td>The numeric day (e.g. 31)</td></tr>
+            <tr><td>E</td><td>The short day (e.g. Tue)</td></tr>
+            <tr><td>EEEE</td><td>The full day (e.g. Tuesday</td></tr>
+            <tr><td>EEEEE</td><td>The day intial (e.g. T)</td></tr>
+          </tbody>
+        </table>
+        <h4>Month:</h4>
+        <table class="table">
+          <thead>
+            <tr><th>String</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>MM</td><td>The numeric month (e.g. 12)</td></tr>
+            <tr><td>MMM</td><td>The short month (e.g. Dec)</td></tr>
+            <tr><td>MMMM</td><td>The full month (e.g. December)</td></tr>
+            <tr><td>MMMMM</td><td>The month inital (e.g. D)</td></tr>
+          </tbody>
+        </table>
+        <h4>Year:</h4>
+        <table class="table">
+          <thead>
+            <tr><th>String</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>yy</td><td>The short numeric year (e.g. 14)</td></tr>
+            <tr><td>yyyy</td><td>The long numeric year (e.g. 2014)</td></tr>
+          </tbody>
+        </table>
+        <h4>Custom text:</h4>
+        <table class="table">
+          <thead>
+            <tr><th>String</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>'doge'</td><td>Any string between '' (e.g. doge)</td></tr>
+          </tbody>
+        </table>
+        <h4><a href="http://www.unicode.org/reports/tr35/tr35-25.html#Date_Format_Patterns">Advanced Formatting</a></h4>
+        <hr>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>
