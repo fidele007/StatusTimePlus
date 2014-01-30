@@ -26,13 +26,14 @@ static NSString *STTime       = nil;
 static BOOL STIsEnabled       = YES;    // Default value
 static BOOL STShowOnLock      = false;   // Default value
 static NSInteger STInterval   = 60;     // Default value
+// static BOOL is24h;
 
 %hook SBStatusBarStateAggregator
 
 /* SET THE REFRESH RATE */
 -(void)_restartTimeItemTimer {
   %orig;
-  // set refresh rate if ST is enabled
+  // Set refresh rate if ST is enabled
   if(STInterval && STIsEnabled)
   {
     // Hook _timeItemTimer iVar
@@ -51,13 +52,21 @@ static NSInteger STInterval   = 60;     // Default value
 -(void)_resetTimeItemFormatter {
   %orig;
   // Hook _timeItemDateFormatter iVar
-  NSDateFormatter *newDateFormat = MSHookIvar<NSDateFormatter *>(self, "_timeItemDateFormatter");
-  // set new clock format if ST is enabled
-  if(STTime && STIsEnabled)
+  NSDateFormatter *dateFormat = MSHookIvar<NSDateFormatter *>(self, "_timeItemDateFormatter");
+
+  // Setup default time
+  NSDateFormatter *defaultFormat = [[NSDateFormatter alloc] init];
+  [defaultFormat setLocale:[NSLocale currentLocale]];
+  [defaultFormat setDateStyle:NSDateFormatterNoStyle];
+  [defaultFormat setTimeStyle:NSDateFormatterShortStyle];
+  NSString *defaultFormatTimeString = [defaultFormat stringFromDate:[NSDate date]];
+
+  // Set new clock format if ST is enabled
+  if(STIsEnabled)
   {
-    [newDateFormat setDateFormat:STTime];
+    [dateFormat setDateFormat:STTime];
   } else {
-    [newDateFormat setDateFormat: @"hh:mm a"];
+    [dateFormat setDateFormat:defaultFormatTimeString];
     NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
   }
 }
@@ -69,7 +78,7 @@ static NSInteger STInterval   = 60;     // Default value
 /* SHOW CLOCK ON LOCKSCREEN */
 -(bool)shouldShowLockStatusBarTime { 
   %orig;
-  // show on lockscreen if ST is enabled
+  // Show on lockscreen if ST is enabled
   if(STShowOnLock && STIsEnabled){
     return STShowOnLock;
   } else {
@@ -102,7 +111,6 @@ static void STLoadPrefs()
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
-    // Initiate clock update for good measure
   }
   [prefs release];
 }
