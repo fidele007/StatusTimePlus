@@ -31,7 +31,9 @@ static BOOL STIsEnabled       = YES;    // Default value
 static BOOL STShowOnLock      = false;  // Default value
 static BOOL STShowFreeMemory  = false;  // Default value
 static NSInteger STInterval   = 60;     // Default value
+static NSTimer *timer;
 
+/* GET THE FREE MEMORY OF THE SYSTEM */
 static int STGetSystemRAM()
 {
   mach_port_t host_port;
@@ -49,6 +51,45 @@ static int STGetSystemRAM()
 
   int freeMemory = round((mem_free / 1024) / 1024);
   return freeMemory;
+}
+
+/* FUNCTION TO FORMAT THE TIME STRING AND START RAM TIMERS */
+static inline void STSetStatusBarDate(id self)
+{
+    self = [%c(SBStatusBarStateAggregator) sharedInstance];
+    NSDateFormatter *dateFormat;
+    object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
+
+    // Setup default time
+    NSDateFormatter *defaultFormat = [[NSDateFormatter alloc] init];
+    [defaultFormat setLocale:[NSLocale currentLocale]];
+    [defaultFormat setDateStyle:NSDateFormatterNoStyle];
+    [defaultFormat setTimeStyle:NSDateFormatterShortStyle];
+    NSString *defaultFormatTimeString = [defaultFormat stringFromDate:[NSDate date]];
+
+    // Set new clock format if ST is enabled
+    if(STIsEnabled)
+    {
+      if(STShowFreeMemory){
+        NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", STGetSystemRAM()];
+        [dateFormat setDateFormat:STTimeWithRAM];
+        if(!timer)
+          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeStringWithMemory) userInfo:nil repeats:YES];
+      } else {
+        [dateFormat setDateFormat:STTime];
+        if(timer){
+          [timer invalidate];
+          timer = nil;
+        }
+      }
+    } else {
+      [dateFormat setDateFormat:defaultFormatTimeString];
+      [timer invalidate];
+      timer = nil;
+      NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
+    }
+
+    [self _updateTimeItems];
 }
 
 %hook SBStatusBarStateAggregator
@@ -72,36 +113,19 @@ static int STGetSystemRAM()
   }
 }
 
-/* FORMAT THE TIME STRING */
--(void)_resetTimeItemFormatter 
+/* SET THE TIME FORMAT */
+- (void)_configureTimeItemDateFormatter
 {
   %orig;
-  // Hook _timeItemDateFormatter iVar
-  NSDateFormatter *dateFormat = MSHookIvar<NSDateFormatter *>(self, "_timeItemDateFormatter");
-
-  // Setup default time
-  NSDateFormatter *defaultFormat = [[NSDateFormatter alloc] init];
-  [defaultFormat setLocale:[NSLocale currentLocale]];
-  [defaultFormat setDateStyle:NSDateFormatterNoStyle];
-  [defaultFormat setTimeStyle:NSDateFormatterShortStyle];
-  NSString *defaultFormatTimeString = [defaultFormat stringFromDate:[NSDate date]];
-
-  // Set new clock format if ST is enabled
-  if(STIsEnabled)
-  {
-    if(STShowFreeMemory){
-      NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", STGetSystemRAM()];
-      [dateFormat setDateFormat:STTimeWithRAM];
-    } else {
-      [dateFormat setDateFormat:STTime];
-    }
-    
-  } else {
-    [dateFormat setDateFormat:defaultFormatTimeString];
-    NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
-  }
+  STSetStatusBarDate(self);
 }
 
+/* HELPER FOR MEMORY */
+%new(v@:)
+- (void)updateTimeStringWithMemory
+{
+  STSetStatusBarDate(self);
+}
 // END HOOKING
 %end
 
@@ -121,17 +145,6 @@ static int STGetSystemRAM()
 // END HOOKING
 %end
 
-/* UPDATE THE CLOCK AFTER SAVE */
-static void STUpdateClock()
-{
-  // Create an object of SBStatusBarStateAggregator
-  id stateAggregator = [%c(SBStatusBarStateAggregator) sharedInstance];
-  // Send messages to new object
-  [stateAggregator _updateTimeItems];
-  [stateAggregator _resetTimeItemFormatter];
-  [stateAggregator updateStatusBarItem: 0];
-}
-
 /* LOAD PREFERENCES */
 static void STLoadPrefs()
 {
@@ -145,6 +158,8 @@ static void STLoadPrefs()
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
+    STSetStatusBarDate(nil);
+    // UpdateAllItems();
   }
   [prefs release];
 }
@@ -160,14 +175,6 @@ static void STLoadPrefs()
       CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"), 
       NULL, 
       CFNotificationSuspensionBehaviorCoalesce);
-
-    // Listen for update ('save') message
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
-      NULL, 
-      (CFNotificationCallback)STUpdateClock, 
-      CFSTR("com.lkemitchll.statustime+prefs/STUpdate"),
-      NULL, 
-      0);
 
     STLoadPrefs();
   }

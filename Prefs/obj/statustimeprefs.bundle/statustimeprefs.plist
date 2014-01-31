@@ -73,8 +73,6 @@
 			<string>STTime</string>
 			<key>label</key>
 			<string>Format</string>
-			<key>PostNotification</key>
-			<string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 		</dict>
 		<dict>
 			<key>cell</key>
