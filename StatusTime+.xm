@@ -1,6 +1,4 @@
 #import <SpringBoard/SpringBoard.h>
-#import <mach/mach.h>
-#import <mach/mach_host.h>
 
 /* 
 Credits:
@@ -26,7 +24,7 @@ Credits:
 
 // Setup required variables
 static NSString *STTime       = [[NSString alloc] init];
-static BOOL STIsEnabled       = YES;    // Default value
+static BOOL STIsEnabled       = true;   // Default value
 static BOOL STShowOnLock      = false;  // Default value
 static NSInteger STInterval   = 60;     // Default value
 
