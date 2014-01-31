@@ -119,6 +119,12 @@
     <dict>
       <key>cell</key>
       <string>PSGroupCell</string>
+      <key>footerText</key>
+      <string>
+        
+        Luke Mitchell - v0.0.7
+        Licensed under GPL v3
+      </string>
     </dict>
     <dict>
       <key>cell</key>
