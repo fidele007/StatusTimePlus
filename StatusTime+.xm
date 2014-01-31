@@ -145,6 +145,19 @@ static inline void STSetStatusBarDate(id self)
 // END HOOKING
 %end
 
+/* UPDATE THE CLOCK AFTER SAVE */
+static void STUpdateClock()
+{
+  // Create an object of SBStatusBarStateAggregator
+  id stateAggregator = [%c(SBStatusBarStateAggregator) sharedInstance];
+  // Send messages to new object
+  [stateAggregator _updateTimeItems];
+  [stateAggregator _resetTimeItemFormatter];
+  [stateAggregator updateStatusBarItem: 0];
+
+  STSetStatusBarDate(nil);
+}
+
 /* LOAD PREFERENCES */
 static void STLoadPrefs()
 {
@@ -159,7 +172,6 @@ static void STLoadPrefs()
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
     STSetStatusBarDate(nil);
-    // UpdateAllItems();
   }
   [prefs release];
 }
@@ -173,6 +185,13 @@ static void STLoadPrefs()
       NULL, 
       (CFNotificationCallback)STLoadPrefs, 
       CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"), 
+      NULL, 
+      CFNotificationSuspensionBehaviorCoalesce);
+
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+      NULL, 
+      (CFNotificationCallback)STUpdateClock, 
+      CFSTR("com.lkemitchll.statustime+prefs/STSave"), 
       NULL, 
       CFNotificationSuspensionBehaviorCoalesce);
 

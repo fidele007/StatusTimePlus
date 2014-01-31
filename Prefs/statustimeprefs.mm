@@ -17,7 +17,7 @@
   // Dismiss keyboard
   [self.view endEditing:YES];
   // Send notification to respring function
-  notify_post("com.lkemitchll.statustime+prefs/STSettingsChanged");
+  notify_post("com.lkemitchll.statustime+prefs/STUpdate");
 }
 
 - (void)STFormatGuide {
