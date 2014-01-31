@@ -31,7 +31,8 @@ static NSInteger STInterval   = 60;     // Default value
 %hook SBStatusBarStateAggregator
 
 /* SET THE REFRESH RATE */
--(void)_restartTimeItemTimer {
+-(void)_restartTimeItemTimer 
+{
   %orig;
   // Set refresh rate if ST is enabled
   if(STInterval && STIsEnabled)
@@ -49,7 +50,8 @@ static NSInteger STInterval   = 60;     // Default value
 }
 
 /* FORMAT THE TIME STRING */
--(void)_resetTimeItemFormatter {
+-(void)_resetTimeItemFormatter 
+{
   %orig;
   // Hook _timeItemDateFormatter iVar
   NSDateFormatter *dateFormat = MSHookIvar<NSDateFormatter *>(self, "_timeItemDateFormatter");
@@ -76,13 +78,14 @@ static NSInteger STInterval   = 60;     // Default value
 %hook SBLockScreenViewController
 
 /* SHOW CLOCK ON LOCKSCREEN */
--(bool)shouldShowLockStatusBarTime { 
+-(bool)shouldShowLockStatusBarTime 
+{ 
   %orig;
   // Show on lockscreen if ST is enabled
   if(STShowOnLock && STIsEnabled){
     return STShowOnLock;
   } else {
-    return false;
+    return %orig;
   }
 }
 // END HOOKING
