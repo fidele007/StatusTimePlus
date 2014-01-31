@@ -26,7 +26,7 @@ Credits:
 @end 
 
 // Setup required variables
-static NSString *STTime       = [[NSString alloc] init];
+static NSString *STTime       = nil;
 static BOOL STIsEnabled       = YES;    // Default value
 static BOOL STShowOnLock      = false;  // Default value
 static BOOL STShowFreeMemory  = false;  // Default value
