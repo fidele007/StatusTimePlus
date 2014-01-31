@@ -23,7 +23,7 @@ Credits:
 @end 
 
 // Setup required variables
-static NSString *STTime       = [[NSString alloc] init];
+static NSString *STTime       = nil;
 static BOOL STIsEnabled       = true;   // Default value
 static BOOL STShowOnLock      = false;  // Default value
 static NSInteger STInterval   = 60;     // Default value
