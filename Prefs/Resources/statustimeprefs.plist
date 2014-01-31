@@ -82,13 +82,11 @@
 			<key>validTitles</key>
 			<array>
 				<string>Second</string>
-        <string>30 Seconds</string>
 				<string>Minute (default)</string>
 			</array>
 			<key>validValues</key>
 			<array>
 				<real>1</real>
-        <real>30</real>
 				<real>60</real>
 			</array>
 		</dict>
