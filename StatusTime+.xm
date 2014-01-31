@@ -10,6 +10,7 @@ Credits:
 - https://github.com/daniel-nagy/CustomCarrier
 - http://stackoverflow.com/questions/15318528/how-to-use-the-value-in-pslinklistcell-in-preference-bundle
 - http://stackoverflow.com/a/15493211/2819263
+- http://forum.openframeworks.cc/t/new-method-for-know-free-memory-in-ios-answer-myself/7451
 - /u/miktr
 - /u/thekirbylover
 */
@@ -31,7 +32,7 @@ static BOOL STShowOnLock      = false;  // Default value
 static BOOL STShowFreeMemory  = false;  // Default value
 static NSInteger STInterval   = 60;     // Default value
 
-static int getSystemRAM()
+static int STGetSystemRAM()
 {
   mach_port_t host_port;
   mach_msg_type_number_t host_size;
@@ -89,7 +90,7 @@ static int getSystemRAM()
   if(STIsEnabled)
   {
     if(STShowFreeMemory){
-      NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", getSystemRAM()];
+      NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", STGetSystemRAM()];
       [dateFormat setDateFormat:STTimeWithRAM];
     } else {
       [dateFormat setDateFormat:STTime];
@@ -144,7 +145,6 @@ static void STLoadPrefs()
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
-    getSystemRAM();
   }
   [prefs release];
 }
