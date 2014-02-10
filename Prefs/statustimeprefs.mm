@@ -16,8 +16,9 @@
 - (void)STSave {
   // Dismiss keyboard
   [self.view endEditing:YES];
-  // Send notification to respring function
+  // Send notification to STUpdateClock function
   notify_post("com.lkemitchll.statustime+prefs/STUpdate");
+  notify_post("com.lkemitchll.statustime+prefs/STSettingsChanged");
 }
 
 - (void)STFormatGuide {

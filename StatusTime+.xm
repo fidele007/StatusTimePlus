@@ -157,11 +157,9 @@ static void STUpdateClock()
   // Create an object of SBStatusBarStateAggregator
   id stateAggregator = [%c(SBStatusBarStateAggregator) sharedInstance];
   // Send messages to new object
-  [stateAggregator _updateTimeItems];
-  [stateAggregator _resetTimeItemFormatter];
-  [stateAggregator updateStatusBarItem: 0];
-
   STSetStatusBarDate(nil);
+  [stateAggregator _updateTimeItems];
+  [stateAggregator updateStatusBarItem: 0];
 }
 
 /* LOAD PREFERENCES */
