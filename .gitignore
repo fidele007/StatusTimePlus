@@ -2,3 +2,4 @@
 *.deb
 .theos/
 _/
+Session.vim
