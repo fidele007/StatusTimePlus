@@ -64,7 +64,7 @@
 			<key>label</key>
 			<string>custom clock format</string>
       <key>footerText</key>
-      <string>NOTE: refreshing every second may cause increased battery drain</string>
+      <string>NOTE: Will respring if set to refresh every second</string>
 		</dict>
 		<dict>
 			<key>cell</key>

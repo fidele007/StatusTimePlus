@@ -16,8 +16,7 @@ Credits:
 */
 
 @class SBStatusBarStateAggregator;
-@interface SBStatusBarStateAggregator : NSObject{
-}
+@interface SBStatusBarStateAggregator : NSObject
 + (id)sharedInstance;
 - (void)_updateTimeItems;
 - (void)_resetTimeItemFormatter;
@@ -161,6 +160,10 @@ static void STUpdateClock()
   [stateAggregator _updateTimeItems];
   [stateAggregator _resetTimeItemFormatter];
   [stateAggregator updateStatusBarItem: 0];
+
+  if(STInterval == 1){
+    [(SpringBoard *)[UIApplication sharedApplication] _relaunchSpringBoardNow];
+  }
 }
 
 /* LOAD PREFERENCES */
