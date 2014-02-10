@@ -159,6 +159,7 @@ static void STUpdateClock()
   // Send messages to new object
   STSetStatusBarDate(nil);
   [stateAggregator _updateTimeItems];
+  [stateAggregator _resetTimeItemFormatter];
   [stateAggregator updateStatusBarItem: 0];
 }
 
