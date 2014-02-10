@@ -2,7 +2,7 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
-/* 
+/*
 Credits:
 - https://github.com/kirbylover4000/ThatSameHack
 - https://github.com/r-plus/CloakStatus
@@ -17,20 +17,20 @@ Credits:
 
 @class SBStatusBarStateAggregator;
 @interface SBStatusBarStateAggregator : NSObject{
-}        
+}
 + (id)sharedInstance;
 - (void)_updateTimeItems;
 - (void)_resetTimeItemFormatter;
 - (void)_restartTimeItemTimer;
 - (void)updateStatusBarItem:(int)arg1;
-@end 
+@end
 
 // Setup required variables
-static NSString *STTime       = nil;
-static BOOL STIsEnabled       = YES;    // Default value
-static BOOL STShowOnLock      = false;  // Default value
-static BOOL STShowFreeMemory  = false;  // Default value
-static NSInteger STInterval   = 60;     // Default value
+static NSString *STTime      = nil;
+static BOOL STIsEnabled      = YES;    // Default value
+static BOOL STShowOnLock     = false;  // Default value
+static BOOL STShowFreeMemory = false;  // Default value
+static NSInteger STInterval  = 60;     // Default value
 static NSTimer *timer;
 
 /* GET THE FREE MEMORY OF THE SYSTEM */
@@ -74,7 +74,9 @@ static inline void STSetStatusBarDate(id self)
         NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", STGetSystemRAM()];
         [dateFormat setDateFormat:STTimeWithRAM];
         if(!timer)
-          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeStringWithMemory) userInfo:nil repeats:YES];
+          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self 
+              selector:@selector(updateTimeStringWithMemory)
+              userInfo:nil repeats:YES];
       } else {
         [dateFormat setDateFormat:STTime];
         if(timer){
@@ -95,18 +97,22 @@ static inline void STSetStatusBarDate(id self)
 %hook SBStatusBarStateAggregator
 
 /* SET THE REFRESH RATE */
--(void)_restartTimeItemTimer 
+-(void)_restartTimeItemTimer
 {
   %orig;
   // Set refresh rate if ST is enabled
   if(STInterval && STIsEnabled)
   {
-    // Hook _timeItemTimer iVar
-    NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
-    // Initialise a date in the future to fire the timer (default = 60 secs)
-    NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: (double)STInterval];
-    // Set fire date
-    [newTimer setFireDate:newFireDate];
+    if(STInterval == 1){
+      // Hook _timeItemTimer iVar
+      NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
+      // Initialise a date in the future to fire the timer (default = 60 secs)
+      NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: (double)STInterval];
+      // Set fire date
+      [newTimer setFireDate:newFireDate];
+    } else{
+      %orig;
+    }
   } else {
     %orig;
     NSLog(@"StatusTime+: INFO: Disabled or no prefs, default refresh rate set");
@@ -132,8 +138,8 @@ static inline void STSetStatusBarDate(id self)
 %hook SBLockScreenViewController
 
 /* SHOW CLOCK ON LOCKSCREEN */
--(bool)shouldShowLockStatusBarTime 
-{ 
+-(bool)shouldShowLockStatusBarTime
+{
   %orig;
   // Show on lockscreen if ST is enabled
   if(STShowOnLock && STIsEnabled){
@@ -165,7 +171,7 @@ static void STLoadPrefs()
   if(prefs)
   {
     // Set variables based on prefs
-    STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled ); 
+    STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
     STShowOnLock = ( [prefs objectForKey:@"STShowOnLock"] ? [[prefs objectForKey:@"STShowOnLock"] boolValue] : STShowOnLock );
     STShowFreeMemory = ( [prefs objectForKey:@"STShowFreeMemory"] ? [[prefs objectForKey:@"STShowFreeMemory"] boolValue] : STShowFreeMemory );
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
@@ -176,23 +182,23 @@ static void STLoadPrefs()
   [prefs release];
 }
 
-%ctor 
+%ctor
 {
   @autoreleasepool {
 
     // Listen for new settings changes
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
-      NULL, 
-      (CFNotificationCallback)STLoadPrefs, 
-      CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"), 
-      NULL, 
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+      NULL,
+      (CFNotificationCallback)STLoadPrefs,
+      CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"),
+      NULL,
       CFNotificationSuspensionBehaviorCoalesce);
 
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
-      NULL, 
-      (CFNotificationCallback)STUpdateClock, 
-      CFSTR("com.lkemitchll.statustime+prefs/STSave"), 
-      NULL, 
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
+      NULL,
+      (CFNotificationCallback)STUpdateClock,
+      CFSTR("com.lkemitchll.statustime+prefs/STSave"),
+      NULL,
       CFNotificationSuspensionBehaviorCoalesce);
 
     STLoadPrefs();
