@@ -22,6 +22,28 @@
 		</dict>
     <dict>
       <key>cell</key>
+      <string>PSGroupCell</string>
+      <key>footerText</key>
+      <string>NOTE: RAM will refresh every 10 seconds.</string>
+    </dict>
+    <dict>
+      <key>cell</key>
+      <string>PSSwitchCell</string>
+      <key>default</key>
+      <false/>
+      <key>defaults</key>
+      <string>com.lkemitchll.statustime+prefs</string>
+      <key>key</key>
+      <string>STShowFreeMemory</string>
+      <key>label</key>
+      <string>Show Free RAM</string>
+      <key>alternateColors</key>
+      <true/>
+      <key>PostNotification</key>
+      <string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
+    </dict>
+    <dict>
+      <key>cell</key>
       <string>PSSwitchCell</string>
       <key>default</key>
       <false/>
@@ -53,8 +75,6 @@
 			<string>STTime</string>
 			<key>label</key>
 			<string>Format</string>
-			<key>PostNotification</key>
-			<string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 		</dict>
     <dict>
       <key>cell</key>

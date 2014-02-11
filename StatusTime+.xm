@@ -16,8 +16,7 @@ Credits:
 */
 
 @class SBStatusBarStateAggregator;
-@interface SBStatusBarStateAggregator : NSObject{
-}        
+@interface SBStatusBarStateAggregator : NSObject
 + (id)sharedInstance;
 - (void)_updateTimeItems;
 - (void)_resetTimeItemFormatter;
@@ -161,6 +160,7 @@ static void STUpdateClock()
   [stateAggregator updateStatusBarItem: 0];
 }
 
+
 /* LOAD PREFERENCES */
 static void STLoadPrefs()
 {
@@ -174,6 +174,11 @@ static void STLoadPrefs()
     STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
+    STSetStatusBarDate(nil);
+
+    for(NSString *key in [prefs allKeys]) {
+      NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
+    }
   }
   [prefs release];
 }
