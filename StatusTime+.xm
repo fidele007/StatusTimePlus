@@ -55,7 +55,8 @@ static int STGetSystemRAM()
 /* FUNCTION TO FORMAT THE TIME STRING AND START RAM TIMERS */
 static inline void STSetStatusBarDate(id self)
 {
-    self = [%c(SBStatusBarStateAggregator) sharedInstance];
+    if(!self)
+      self = [%c(SBStatusBarStateAggregator) sharedInstance];
     NSDateFormatter *dateFormat;
     object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
 
@@ -70,12 +71,10 @@ static inline void STSetStatusBarDate(id self)
     if(STIsEnabled)
     {
       if(STShowFreeMemory){
-        NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'RAM:' %d", STGetSystemRAM()];
+        NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'R:' %d", STGetSystemRAM()];
         [dateFormat setDateFormat:STTimeWithRAM];
         if(!timer)
-          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self 
-              selector:@selector(updateTimeStringWithMemory)
-              userInfo:nil repeats:YES];
+          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeStringWithMemory) userInfo:nil repeats:YES];
       } else {
         [dateFormat setDateFormat:STTime];
         if(timer){
@@ -102,7 +101,7 @@ static inline void STSetStatusBarDate(id self)
   // Set refresh rate if ST is enabled
   if(STInterval && STIsEnabled)
   {
-    if(STInterval == 1){
+    if(STInterval){
       // Hook _timeItemTimer iVar
       NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
       // Initialise a date in the future to fire the timer (default = 60 secs)
@@ -158,13 +157,9 @@ static void STUpdateClock()
   // Send messages to new object
   STSetStatusBarDate(nil);
   [stateAggregator _updateTimeItems];
-  [stateAggregator _resetTimeItemFormatter];
   [stateAggregator updateStatusBarItem: 0];
-
-  if(STInterval == 1){
-    [(SpringBoard *)[UIApplication sharedApplication] _relaunchSpringBoardNow];
-  }
 }
+
 
 /* LOAD PREFERENCES */
 static void STLoadPrefs()
@@ -180,6 +175,10 @@ static void STLoadPrefs()
     STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
     [STTime retain];
     STSetStatusBarDate(nil);
+
+    for(NSString *key in [prefs allKeys]) {
+      NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
+    }
   }
   [prefs release];
 }
@@ -195,7 +194,7 @@ static void STLoadPrefs()
       CFSTR("com.lkemitchll.statustime+prefs/STSettingsChanged"),
       NULL,
       CFNotificationSuspensionBehaviorCoalesce);
-
+    // Listen for Save button push
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
       NULL,
       (CFNotificationCallback)STUpdateClock,
