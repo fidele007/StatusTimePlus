@@ -56,14 +56,10 @@
 			<key>PostNotification</key>
 			<string>com.lkemitchll.statustime+prefs/STSettingsChanged</string>
 		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Refresh Interval</string>
-      <key>footerText</key>
-      <string>NOTE: refreshing every second may cause increased battery drain</string>
-		</dict>
+    <dict>
+      <key>cell</key>
+      <key>PSGroupCell</key>
+    </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkListCell</string>
@@ -89,10 +85,6 @@
 				<real>1</real>
 				<real>60</real>
 			</array>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
 		</dict>
 		<dict>
 			<key>cell</key>

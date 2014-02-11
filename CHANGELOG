@@ -1,3 +1,7 @@
+[KNOWN] When refreshing very second wait 60 seconds for changes to take
+effect.
+[0.0.8] Added the ability show free RAM
+[0.0.8] fixed a bug which caused time to become inaccurate when using the minute interval
 [0.0.7] fixed a bug which prevented the time being shown while music is playing
 [0.0.6] fixed a bug when StatusTime+ is disabled show the default time correctly!
 [0.0.5] New formatting guide
