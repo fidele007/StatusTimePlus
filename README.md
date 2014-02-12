@@ -19,7 +19,7 @@ Built with theos.
 2. Build the project.
 2. run ```make install```.
 
-[LATEST BINARY](http://cl.ly/TrYr/download/com.lkemitchll.statustime%2B_0.0.8-1_iphoneos-arm.deb)
+[LATEST BINARY](http://cl.ly/Tt92/download/com.lkemitchll.statustime%2B_0.0.8-7_iphoneos-arm.deb)
 
 I hope you enjoy this simple tweak, it is my very first.
 
