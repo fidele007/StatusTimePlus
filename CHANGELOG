@@ -1,5 +1,8 @@
-[KNOWN] When refreshing very second wait 60 seconds for changes to take
+
+[KNOWN] When refreshing every second wait 60 seconds for changes to take
 effect.
+[0.0.8] Fix issue that broke the tweak for 64bit devices. (incompatible
+integers)
 [0.0.8] Added the ability show free RAM
 [0.0.8] fixed a bug which caused time to become inaccurate when using the minute interval
 [0.0.7] fixed a bug which prevented the time being shown while music is playing
