@@ -124,7 +124,7 @@ static inline void STSetStatusBarDate(id self)
 }
 
 /* SET THE TIME FORMAT */
-- (void)_configureTimeItemDateFormatter
+- (void)_resetTimeItemDateFormatter
 {
   %orig;
   STSetStatusBarDate(self);
@@ -183,6 +183,7 @@ static void STLoadPrefs()
       STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
 
       STSetStatusBarDate(nil);
+      STUpdateClock();
 
       for(NSString *key in [prefs allKeys]) {
         NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
