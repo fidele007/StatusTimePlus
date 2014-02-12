@@ -1,4 +1,3 @@
-
 [KNOWN] When refreshing every second wait 60 seconds for changes to take
 effect.
 [0.0.8] Fix issue that broke the tweak for 64bit devices. (incompatible
