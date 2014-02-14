@@ -45,7 +45,7 @@ static NSNumber *STGetSystemRAM()
     host_page_size(host_port, &pagesize);
     vm_statistics_data_t vm_stat;
     if (host_statistics(host_port, HOST_VM_INFO, (host_info_t)&vm_stat, &host_size) != KERN_SUCCESS)
-      NSLog(@"Failed to fetch vm statistics");
+      NSLog(@"StatusTime+: Failed to fetch vm statistics");
 
     natural_t mem_free = vm_stat.free_count * pagesize;
 
@@ -65,13 +65,6 @@ static inline void STSetStatusBarDate(id self)
     NSDateFormatter *dateFormat;
     object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
 
-    // Setup default time
-    NSDateFormatter *defaultFormat = [[NSDateFormatter alloc] init];
-    [defaultFormat setLocale:[NSLocale currentLocale]];
-    [defaultFormat setDateStyle:NSDateFormatterNoStyle];
-    [defaultFormat setTimeStyle:NSDateFormatterShortStyle];
-    NSString *defaultFormatTimeString = [defaultFormat stringFromDate:[NSDate date]];
-
     // Set new clock format if ST is enabled
     if(STIsEnabled)
     {
@@ -88,7 +81,7 @@ static inline void STSetStatusBarDate(id self)
         }
       }
     } else {
-      [dateFormat setDateFormat:defaultFormatTimeString];
+      [dateFormat setDateFormat:@"HH:mm a"];
       [timer invalidate];
       timer = nil;
       NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
@@ -127,6 +120,7 @@ static inline void STSetStatusBarDate(id self)
 - (void)_resetTimeItemDateFormatter
 {
   %orig;
+  NSLog(@"resetTimeItemFormatter!");
   STSetStatusBarDate(self);
 }
 
@@ -134,6 +128,7 @@ static inline void STSetStatusBarDate(id self)
 %new(v@:)
 - (void)updateTimeStringWithMemory
 {
+  NSLog(@"updateTimeStringWithMemory!");
   STSetStatusBarDate(self);
 }
 // END HOOKING
@@ -159,6 +154,7 @@ static inline void STSetStatusBarDate(id self)
 static void STUpdateClock()
 {
   @autoreleasepool {
+    NSLog(@"STUpdateClock!");
     // Create an object of SBStatusBarStateAggregator
     id stateAggregator = [%c(SBStatusBarStateAggregator) sharedInstance];
     // Send messages to new object
@@ -185,9 +181,10 @@ static void STLoadPrefs()
       STSetStatusBarDate(nil);
       STUpdateClock();
 
-      for(NSString *key in [prefs allKeys]) {
-        NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
-      }
+      // Debug
+      //for(NSString *key in [prefs allKeys]) {
+      //  NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
+      //}
     }
   }
 }
@@ -212,5 +209,6 @@ static void STLoadPrefs()
       CFNotificationSuspensionBehaviorCoalesce);
 
     STLoadPrefs();
+    STUpdateClock();
   }
 }
