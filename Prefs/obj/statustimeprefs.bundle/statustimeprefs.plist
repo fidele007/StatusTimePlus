@@ -76,10 +76,6 @@
 			<key>label</key>
 			<string>Format</string>
 		</dict>
-    <dict>
-      <key>cell</key>
-      <key>PSGroupCell</key>
-    </dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkListCell</string>
