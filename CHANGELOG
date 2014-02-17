@@ -1,6 +1,5 @@
-[KNOWN] After a respring a save is required on 64bit devices.
-[KNOWN] When refreshing every second wait 60 seconds for changes to take
-effect.
+[0.0.9] Lockscreen top grabber now hides when clock is shown on lockscreen
+[0.0.9] Fix issue which broke StatusTime+ on respring or reboot
 [0.0.8] Fix issue that broke the tweak for 64bit devices. (incompatible
 integers)
 [0.0.8] Added the ability show free RAM
