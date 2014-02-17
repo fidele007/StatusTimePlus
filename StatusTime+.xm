@@ -142,6 +142,21 @@ static inline void STSetStatusBarTimeWithRAM(id self)
 // END HOOKING
 %end
 
+/* DISABLE TOP GRABBER ON LOCKSCREEN IF ENABLED */
+%hook SBLockScreenView
+-(float)_topGrabberYOriginForPercentScrolled:(float)arg1 
+{
+  %orig;
+  if(STShowOnLock && STIsEnabled){
+    NSNumber *grabberPosition = [NSNumber numberWithFloat:-12];
+    return [grabberPosition floatValue];
+  } else {
+    return %orig;
+  }
+}
+// END HOOKING
+%end
+
 %hook SBLockScreenViewController
 
 /* SHOW CLOCK ON LOCKSCREEN */
