@@ -22,7 +22,7 @@
 }
 
 - (void)STFormatGuide {
-  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://statustime.eu01.aws.af.cm/"]];
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://146.185.180.252/statustime/"]];
 }
 
 - (void)STDonate {
