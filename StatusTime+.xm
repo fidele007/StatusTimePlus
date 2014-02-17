@@ -116,7 +116,6 @@ static inline void STSetStatusBarTimeWithRAM(id self)
     } else {
       [dateFormat setDateFormat:STTime];
       if(timer) {
-        NSLog(@"StatusTime+: timer invalid");
         [timer invalidate];
         timer = nil;
       }
@@ -124,7 +123,6 @@ static inline void STSetStatusBarTimeWithRAM(id self)
   } else {
     [dateFormat setDateFormat:@"H:mm a"];
     if(timer) {
-      NSLog(@"StatusTime+: timer invalid");
       [timer invalidate];
       timer = nil;
     }
@@ -135,7 +133,6 @@ static inline void STSetStatusBarTimeWithRAM(id self)
 %new(v@:)
 - (void)updateTimeMemoryString
 {
-  NSLog(@"StatusTime+: Tick!");
   STSetStatusBarTimeWithRAM(self);
 }
 
@@ -193,7 +190,6 @@ static void STLoadPrefs()
     NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
     if(prefs)
     {
-      NSLog(@"StatusTime+: prefs = true");
       // Set variables based on prefs
       STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
       STShowOnLock = ( [prefs objectForKey:@"STShowOnLock"] ? [[prefs objectForKey:@"STShowOnLock"] boolValue] : STShowOnLock );
