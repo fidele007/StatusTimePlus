@@ -3,5 +3,5 @@
 .theos/
 _/
 Session.vim
-obj/*
-Prefs/obj/*
+obj/
+Prefs/obj/
