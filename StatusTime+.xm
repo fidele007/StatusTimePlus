@@ -56,37 +56,19 @@ static NSNumber *STGetSystemRAM()
 }
 
 /* FUNCTION TO FORMAT THE TIME STRING AND START RAM TIMERS */
-static inline void STSetStatusBarDate(id self)
+static inline void STSetStatusBarTimeWithRAM(id self)
 {
   @autoreleasepool{
-    if(!self)
+    if(!self) {
       self = [%c(SBStatusBarStateAggregator) sharedInstance];
+    }
 
     NSDateFormatter *dateFormat;
     object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
 
-    // Set new clock format if ST is enabled
-    if(STIsEnabled)
-    {
-      if(STShowFreeMemory){
-        NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'R:' %@", STGetSystemRAM()];
-        [dateFormat setDateFormat:STTimeWithRAM];
-        if(!timer)
-          timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeStringWithMemory) userInfo:nil repeats:YES];
-      } else {
-        [dateFormat setDateFormat:STTime];
-        if(timer){
-          [timer invalidate];
-          timer = nil;
-        }
-      }
-    } else {
-      [dateFormat setDateFormat:@"HH:mm a"];
-      [timer invalidate];
-      timer = nil;
-      NSLog(@"StatusTime+: INFO: Disabled or no prefs, default format set");
-    }
+    NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'R:' %@", STGetSystemRAM()];
 
+    [dateFormat setDateFormat:STTimeWithRAM];
     [self _updateTimeItems];
   }
 }
@@ -100,14 +82,14 @@ static inline void STSetStatusBarDate(id self)
   // Set refresh rate if ST is enabled
   if(STInterval && STIsEnabled)
   {
-    if(STInterval){
+    if(STInterval != 60){
       // Hook _timeItemTimer iVar
       NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
       // Initialise a date in the future to fire the timer (default = 60 secs)
       NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: (double)STInterval];
       // Set fire date
       [newTimer setFireDate:newFireDate];
-    } else{
+    } else {
       %orig;
     }
   } else {
@@ -117,20 +99,46 @@ static inline void STSetStatusBarDate(id self)
 }
 
 /* SET THE TIME FORMAT */
-- (void)_resetTimeItemDateFormatter
+- (void)_resetTimeItemFormatter
 {
   %orig;
-  NSLog(@"resetTimeItemFormatter!");
-  STSetStatusBarDate(self);
+  // Hook _timeItemDateFormatter iVar
+  NSDateFormatter *dateFormat = MSHookIvar<NSDateFormatter *>(self, "_timeItemDateFormatter");
+
+  if(STIsEnabled)
+  {
+    if(STShowFreeMemory)
+    {
+      STSetStatusBarTimeWithRAM(self);
+      if(!timer){
+        timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+      }
+    } else {
+      [dateFormat setDateFormat:STTime];
+      if(timer) {
+        NSLog(@"StatusTime+: timer invalid");
+        [timer invalidate];
+        timer = nil;
+      }
+    }
+  } else {
+    [dateFormat setDateFormat:@"H:mm a"];
+    if(timer) {
+      NSLog(@"StatusTime+: timer invalid");
+      [timer invalidate];
+      timer = nil;
+    }
+  }
 }
 
 /* HELPER FOR MEMORY */
 %new(v@:)
-- (void)updateTimeStringWithMemory
+- (void)updateTimeMemoryString
 {
-  NSLog(@"updateTimeStringWithMemory!");
-  STSetStatusBarDate(self);
+  NSLog(@"StatusTime+: Tick!");
+  STSetStatusBarTimeWithRAM(self);
 }
+
 // END HOOKING
 %end
 
@@ -154,11 +162,10 @@ static inline void STSetStatusBarDate(id self)
 static void STUpdateClock()
 {
   @autoreleasepool {
-    NSLog(@"STUpdateClock!");
     // Create an object of SBStatusBarStateAggregator
     id stateAggregator = [%c(SBStatusBarStateAggregator) sharedInstance];
     // Send messages to new object
-    STSetStatusBarDate(nil);
+    [stateAggregator _resetTimeItemFormatter];
     [stateAggregator _updateTimeItems];
     [stateAggregator updateStatusBarItem: 0];
   }
@@ -171,6 +178,7 @@ static void STLoadPrefs()
     NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.lkemitchll.statustime+prefs.plist"];
     if(prefs)
     {
+      NSLog(@"StatusTime+: prefs = true");
       // Set variables based on prefs
       STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
       STShowOnLock = ( [prefs objectForKey:@"STShowOnLock"] ? [[prefs objectForKey:@"STShowOnLock"] boolValue] : STShowOnLock );
@@ -178,7 +186,6 @@ static void STLoadPrefs()
       STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
       STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
 
-      STSetStatusBarDate(nil);
       STUpdateClock();
 
       // Debug
