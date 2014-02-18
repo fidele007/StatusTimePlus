@@ -1,4 +1,5 @@
 #import <SpringBoard/SpringBoard.h>
+#import <Foundation/NSHost.h>
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -20,7 +21,7 @@ Credits:
 + (id)sharedInstance;
 - (void)_updateTimeItems;
 - (void)_resetTimeItemFormatter;
-- (void)_restartTimeItemTimer;
+- (void)_restartTimeItemTimerRAM;
 - (void)updateStatusBarItem:(int)arg1;
 @end
 
@@ -29,8 +30,10 @@ static NSString *STTime      = nil;
 static BOOL STIsEnabled      = YES;    // Default value
 static BOOL STShowOnLock     = false;  // Default value
 static BOOL STShowFreeMemory = false;  // Default value
+static BOOL STShowIPAddress  = false;  // Default value
 static NSInteger STInterval  = 60;     // Default value
-static NSTimer *timer;
+static NSTimer *timerRAM;
+static NSTimer *timerIP;
 
 /* GET THE FREE MEMORY OF THE SYSTEM */
 static NSNumber *STGetSystemRAM()
@@ -55,7 +58,25 @@ static NSNumber *STGetSystemRAM()
   }
 }
 
-/* FUNCTION TO FORMAT THE TIME STRING AND START RAM TIMERS */
+/* GET THE LOCAL IP ADDRESS OF THE SYSTEM */
+static NSString *STGetSystemIPAddress()
+{
+  @autoreleasepool{
+    NSString *ipString = [[NSString init] alloc];
+
+    NSHost *host = [NSHost currentHost];
+
+    if (host) {
+      ipString = [host address];
+    } else {
+      ipString = @"No IP Found";
+    }
+
+    return ipString;
+  }
+}
+
+/* FUNCTION TO FORMAT THE TIME STRING AND START RAM TIMER */
 static inline void STSetStatusBarTimeWithRAM(id self)
 {
   @autoreleasepool{
@@ -73,10 +94,28 @@ static inline void STSetStatusBarTimeWithRAM(id self)
   }
 }
 
+/* FUNCTION TO FORMAT THE TIME STRING AND START IP ADDRESS TIMER */
+static inline void STSetStatusBarTimeWithIPAddress(id self)
+{
+  @autoreleasepool{
+    if(!self) {
+      self = [%c(SBStatusBarStateAggregator) sharedInstance];
+    }
+
+    NSDateFormatter *dateFormat;
+    object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
+
+    NSString *STTimeWithIPAddress = [STTime stringByAppendingFormat:@" %@", STGetSystemIPAddress()];
+
+    [dateFormat setDateFormat:STTimeWithIPAddress];
+    [self _updateTimeItems];
+  }
+}
+
 %hook SBStatusBarStateAggregator
 
 /* SET THE REFRESH RATE */
--(void)_restartTimeItemTimer
+-(void)_restartTimeItemTimerRAM
 {
   %orig;
   // Set refresh rate if ST is enabled
@@ -84,7 +123,7 @@ static inline void STSetStatusBarTimeWithRAM(id self)
   {
     if(STInterval != 60){
       // Hook _timeItemTimer iVar
-      NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemTimer");
+      NSTimer *newTimer = MSHookIvar<NSTimer *>(self, "_timeItemtimerRAM");
       // Initialise a date in the future to fire the timer (default = 60 secs)
       NSDate *newFireDate = [NSDate dateWithTimeIntervalSinceNow: (double)STInterval];
       // Set fire date
@@ -110,21 +149,34 @@ static inline void STSetStatusBarTimeWithRAM(id self)
     if(STShowFreeMemory)
     {
       STSetStatusBarTimeWithRAM(self);
-      if(!timer){
-        timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+      if(!timerRAM){
+        timerRAM = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+      }
+    } else if(STShowIPAddress) {
+      STSetStatusBarTimeWithIPAddress(self);
+      if(!timerIP){
+        timerIP = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimeIPAddressString) userInfo:nil repeats:YES];
       }
     } else {
       [dateFormat setDateFormat:STTime];
-      if(timer) {
-        [timer invalidate];
-        timer = nil;
+      if(timerRAM) {
+        [timerRAM invalidate];
+        timerRAM = nil;
+      }
+      if(timerIP) {
+        [timerIP invalidate];
+        timerIP = nil;
       }
     }
   } else {
     [dateFormat setDateFormat:@"H:mm a"];
-    if(timer) {
-      [timer invalidate];
-      timer = nil;
+    if(timerRAM) {
+      [timerRAM invalidate];
+      timerRAM = nil;
+    }
+    if(timerIP) {
+      [timerIP invalidate];
+      timerIP = nil;
     }
   }
 }
@@ -134,6 +186,13 @@ static inline void STSetStatusBarTimeWithRAM(id self)
 - (void)updateTimeMemoryString
 {
   STSetStatusBarTimeWithRAM(self);
+}
+
+/* HELPER FOR IP ADDRESS */
+%new(v@:)
+- (void)updateTimeIPAddressString
+{
+  STSetStatusBarTimeWithIPAddress(self);
 }
 
 // END HOOKING
@@ -194,6 +253,7 @@ static void STLoadPrefs()
       STIsEnabled = ( [prefs objectForKey:@"STIsEnabled"] ? [[prefs objectForKey:@"STIsEnabled"] boolValue] : STIsEnabled );
       STShowOnLock = ( [prefs objectForKey:@"STShowOnLock"] ? [[prefs objectForKey:@"STShowOnLock"] boolValue] : STShowOnLock );
       STShowFreeMemory = ( [prefs objectForKey:@"STShowFreeMemory"] ? [[prefs objectForKey:@"STShowFreeMemory"] boolValue] : STShowFreeMemory );
+      STShowIPAddress = ( [prefs objectForKey:@"STShowIPAddress"] ? [[prefs objectForKey:@"STShowIPAddress"] boolValue] : STShowIPAddress );
       STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
       STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
 
