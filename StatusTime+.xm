@@ -136,7 +136,6 @@ static inline void STSetStatusBarTimeWithRAM(id self)
 %new(v@:)
 - (void)updateTimeMemoryString
 {
-  NSLog(@"Tick");
   STSetStatusBarTimeWithRAM(self);
 }
 
