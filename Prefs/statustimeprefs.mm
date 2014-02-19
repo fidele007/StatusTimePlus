@@ -22,7 +22,7 @@
 }
 
 - (void)STFormatGuide {
-  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://146.185.180.252/statustime/"]];
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://www.statusti.me"]];
 }
 
 - (void)STDonate {
