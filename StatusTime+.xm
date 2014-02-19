@@ -1,4 +1,9 @@
 #import <SpringBoard/SpringBoard.h>
+<<<<<<< HEAD
+=======
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+>>>>>>> further experiments with IP address (currently entering safemode)
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -62,17 +67,33 @@ static NSNumber *STGetSystemRAM()
 static NSString *STGetSystemIPAddress()
 {
   @autoreleasepool{
-    NSString *ipString = [[NSString init] alloc];
+    NSString *address = @"error";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
 
-    NSHost *host = [NSHost currentHost];
+    // retrieve the current interfaces - returns 0 on success
+    success = getifaddrs(&interfaces);
 
-    if (host) {
-      ipString = [host address];
-    } else {
-      ipString = @"No IP Found";
+    if (success == 0) {
+      // Loop through linked list of interfaces
+      temp_addr = interfaces;
+      while (temp_addr != NULL) {
+        if( temp_addr->ifa_addr->sa_family == AF_INET) {
+          // Check if interface is en0 which is the wifi connection on the iPhone
+          if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+            // Get NSString from C String
+            address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
+          }
+        }
+        temp_addr = temp_addr->ifa_next;
+      }
     }
 
-    return ipString;
+    // Free memory
+    freeifaddrs(interfaces);
+    NSLog(@"StatusTime+: Address = %@", address);
+    return address;
   }
 }
 
@@ -101,11 +122,12 @@ static inline void STSetStatusBarTimeWithIPAddress(id self)
     if(!self) {
       self = [%c(SBStatusBarStateAggregator) sharedInstance];
     }
+    NSLog(@"StatusTime+: STSetStatusBarTimeWithIPAddress!");
 
     NSDateFormatter *dateFormat;
     object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
 
-    NSString *STTimeWithIPAddress = [STTime stringByAppendingFormat:@" %@", STGetSystemIPAddress()];
+    NSString *STTimeWithIPAddress = [STTime stringByAppendingFormat:@"'IP:'%@", STGetSystemIPAddress()];
 
     [dateFormat setDateFormat:STTimeWithIPAddress];
     [self _updateTimeItems];
@@ -158,6 +180,7 @@ static inline void STSetStatusBarTimeWithIPAddress(id self)
 		timerRAM = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
 	  }
     } else if(STShowIPAddress) {
+      NSLog(@"StatusTime+: STShowIPAddress = true");
       STSetStatusBarTimeWithIPAddress(self);
       if(!timerIP){
         timerIP = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimeIPAddressString) userInfo:nil repeats:YES];
@@ -265,10 +288,10 @@ static void STLoadPrefs()
 
       STUpdateClock();
 
-      // Debug
-      //for(NSString *key in [prefs allKeys]) {
-      //  NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
-      //}
+      //Debug
+      for(NSString *key in [prefs allKeys]) {
+        NSLog(@"StatusTime+: %@ = %@", key, [prefs objectForKey:key]);
+      }
     }
   }
 }
