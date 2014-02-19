@@ -1,3 +1,6 @@
+[0.1.0] Changed RAM string to '000MB'
+[0.1.0] Added the ability to change RAM refresh rate
+[0.1.0] Rearrange preferences
 [0.0.9] Lockscreen top grabber now hides when clock is shown on lockscreen
 [0.0.9] Fix issue which broke StatusTime+ on respring or reboot
 [0.0.8] Fix issue that broke the tweak for 64bit devices. (incompatible

@@ -1,7 +1,7 @@
 Package: com.lkemitchll.statustime+
 Name: StatusTime+
 Depends: mobilesubstrate
-Version: 0.0.9
+Version: 0.1.0
 Architecture: iphoneos-arm
 Description: Customise the Status Bar clock with custom strings.
 Maintainer: Luke Mitchell
