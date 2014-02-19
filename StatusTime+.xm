@@ -30,6 +30,7 @@ static BOOL STIsEnabled      = YES;    // Default value
 static BOOL STShowOnLock     = false;  // Default value
 static BOOL STShowFreeMemory = false;  // Default value
 static NSInteger STInterval  = 60;     // Default value
+static NSInteger STRAMInterval = 10;   // Default value
 static NSTimer *timer;
 
 /* GET THE FREE MEMORY OF THE SYSTEM */
@@ -66,7 +67,7 @@ static inline void STSetStatusBarTimeWithRAM(id self)
     NSDateFormatter *dateFormat;
     object_getInstanceVariable(self, "_timeItemDateFormatter", (void**)&dateFormat);
 
-    NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@" 'R:' %@", STGetSystemRAM()];
+    NSString *STTimeWithRAM = [STTime stringByAppendingFormat:@"%@'MB'", STGetSystemRAM()];
 
     [dateFormat setDateFormat:STTimeWithRAM];
     [self _updateTimeItems];
@@ -111,7 +112,9 @@ static inline void STSetStatusBarTimeWithRAM(id self)
     {
       STSetStatusBarTimeWithRAM(self);
       if(!timer){
-        timer = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+        if(STRAMInterval) {
+          timer = [NSTimer scheduledTimerWithTimeInterval:STRAMInterval target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+        }
       }
     } else {
       [dateFormat setDateFormat:STTime];
@@ -133,6 +136,7 @@ static inline void STSetStatusBarTimeWithRAM(id self)
 %new(v@:)
 - (void)updateTimeMemoryString
 {
+  NSLog(@"Tick");
   STSetStatusBarTimeWithRAM(self);
 }
 
@@ -196,6 +200,7 @@ static void STLoadPrefs()
       STShowFreeMemory = ( [prefs objectForKey:@"STShowFreeMemory"] ? [[prefs objectForKey:@"STShowFreeMemory"] boolValue] : STShowFreeMemory );
       STTime = ( [prefs objectForKey:@"STTime"] ? [prefs objectForKey:@"STTime"] : STTime );
       STInterval = ([prefs objectForKey:@"STTime"] ? [[prefs objectForKey:@"STRefresh"] integerValue] : STInterval);
+      STRAMInterval = ([prefs objectForKey:@"STRAMInterval"] ? [[prefs objectForKey:@"STRAMInterval"] integerValue] : STRAMInterval);
 
       STUpdateClock();
 
