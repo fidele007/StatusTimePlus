@@ -11,8 +11,8 @@ Built with theos.
 ##Build Instructions
 
 1. Clone this repository.
-2. symlink your theos directory into the root of the project.
-3. run ```make package```.
+2. Symlink your theos directory into the root of the project.
+3. Run ```make package```.
 
 ##Install Instructions
 1. Set your ```THEOS_DEVICE_IP``` environment variable.
