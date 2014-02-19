@@ -1,9 +1,6 @@
 #import <SpringBoard/SpringBoard.h>
-<<<<<<< HEAD
-=======
 #include <ifaddrs.h>
 #include <arpa/inet.h>
->>>>>>> further experiments with IP address (currently entering safemode)
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 
@@ -36,7 +33,6 @@ static BOOL STShowOnLock     = false;  // Default value
 static BOOL STShowFreeMemory = false;  // Default value
 static BOOL STShowIPAddress  = false;  // Default value
 static NSInteger STInterval  = 60;     // Default value
-static NSInteger STRAMInterval = 10;   // Default value
 static NSTimer *timerRAM;
 static NSTimer *timerIP;
 
@@ -175,10 +171,17 @@ static inline void STSetStatusBarTimeWithIPAddress(id self)
         if(STRAMInterval) {
           timerRAM = [NSTimer scheduledTimerWithTimeInterval:STRAMInterval target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
         } else {
-		} timerRAM = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+		  timerRAM = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
+		} 
       } else {
 		timerRAM = [NSTimer scheduledTimerWithTimeInterval:10.0f target:self selector:@selector(updateTimeMemoryString) userInfo:nil repeats:YES];
 	  }
+    } else if(STShowIPAddress) {
+      NSLog(@"StatusTime+: STShowIPAddress = true");
+      STSetStatusBarTimeWithIPAddress(self);
+      if(!timerIP){
+        timerIP = [NSTimer scheduledTimerWithTimeInterval:60.0f target:self selector:@selector(updateTimeIPAddressString) userInfo:nil repeats:YES];
+      }
     } else if(STShowIPAddress) {
       NSLog(@"StatusTime+: STShowIPAddress = true");
       STSetStatusBarTimeWithIPAddress(self);
