@@ -17,7 +17,7 @@ Built with theos.
 ##Install Instructions
 1. Set your ```THEOS_DEVICE_IP``` environment variable.
 2. Build the project.
-2. run ```make install```.
+2. Run ```make install```.
 
 DOWNLOAD LATEST RELEASE FROM BIGBOSS OR RELEASES TAB ABOVE.
 
