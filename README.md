@@ -4,7 +4,7 @@
 
 An iOS 7 tweak for jailbroken devices that allows the user to customise the Status Bar clock with any custom string including [unicode time strings](http://www.unicode.org/reports/tr35/tr35-25.html#Date_Format_Patterns).
 
-![Screenshot](http://cl.ly/image/2F0H3Y3O3B2W/IMG_1662.PNG)
+![Screenshot](http://cl.ly/TztR/IMG_1681.jpg)
 
 Built with theos.
 
